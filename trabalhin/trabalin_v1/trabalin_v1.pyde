@@ -9,8 +9,8 @@ vetorzin_azul = []
 vetorzin_vermelho = []
 
 # Variáveis constantes
-coex = 9
-coey = 2
+coex = 4
+coey = 10
 
 def setup():
     size(1830, 910)
@@ -33,6 +33,7 @@ def draw():
     circle(bolinhax - multx*coex, bolinhay - multy*coey, 2*bolinha_raio)
     
     fill(255)
+    noStroke()
     circle(bolinhax, bolinhay, 2*bolinha_raio)
     
     if frameCount % 30 == 0:
@@ -42,6 +43,7 @@ def draw():
         if ((bolinhax - i[0])**2 + (bolinhay - i[1])**2)**0.5 <= 30:
             vetorzin_azul.remove(i)
             fill(0)
+            noStroke()
             circle(i[0], i[1], bolinha_raio)
             multx *= 1.3
             multy *= 1.3
@@ -50,6 +52,7 @@ def draw():
         if ((bolinhax - i[0])**2 + (bolinhay - i[1])**2)**0.5 <= 30:
             vetorzin_vermelho.remove(i)
             fill(0)
+            noStroke()
             circle(i[0], i[1], bolinha_raio)
             multx *= 0.8
             multy *= 0.8
@@ -59,8 +62,10 @@ def remix():
     if rd.randint(0, 1) == 0:
         vetorzin_azul.append((rd.randint(bolinha_raio, width), rd.randint(bolinha_raio, height)))
         fill(0, 0, 300)
+        noStroke()
         circle(vetorzin_azul[len(vetorzin_azul) - 1][0], vetorzin_azul[len(vetorzin_azul) - 1][1], bolinha_raio)
     else:
         vetorzin_vermelho.append((rd.randint(bolinha_raio, width), rd.randint(bolinha_raio, height)))
         fill(300, 0, 0)
+        noStroke()
         circle(vetorzin_vermelho[len(vetorzin_vermelho) - 1][0], vetorzin_vermelho[len(vetorzin_vermelho) - 1][1], bolinha_raio)
