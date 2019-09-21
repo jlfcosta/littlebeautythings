@@ -1,10 +1,12 @@
 import random as rd
 
+# Declarando as variáveis: t = tempo, p = posição, v = velocidade, a = aceleração (gravidade):
 t = 0
 p = PVector(26, 874)
 v = PVector(0, 0)
 a = PVector(0, 0)
 
+# B é a lista das coordenadas das bolinhas que estão caindo:
 B = []
 
 def setup():
@@ -14,20 +16,24 @@ def draw():
     global t, p, v, a, B
     t += 0.03
     
+    # Atualização do vetor posição:
     p.add(v*t)
     p.y += 0.5*a.y*t*t
     
+    # Reinicialização das variáveis caso a bolinha branca encontre um dos limites:
     if p.y >= 875 or p.x <= 25 or p.x >= 875:
         t = 0
         p = PVector(26, 874)
         v *= 0
         a *= 0
     
+    # Desenho:
     background(160)
     noStroke()
     fill(255)
     circle(p.x, p.y, 50)
     
+    # (Estética braba) Caso a bolinha branca não estiver se mexendo, uma setinha surge nela.
     if a.y == 0:
         m = PVector(mouseX - p.x, mouseY - p.y).normalize()
         j = PVector(mouseX - p.x, mouseY - p.y).normalize().rotate(0.7853981)
@@ -39,14 +45,15 @@ def draw():
         fill(255)
         triangle(p.x + m.x, p.y + m.y, p.x + j.x, p.y + j.y, p.x + k.x, p.y + k.y)
     
-    if frameCount%200 == 0:
-        bombinha()
+    if frameCount%170 == 50:
+        bombinha() # Função de construção das bolinhas pretas.
     
     for i in B:
         i[1] += 1
         fill(0)
         circle(i[0], i[1], 10)
         
+        # Reinicialização das variáveis caso haja interseção:
         if ((p.x - i[0])**2 + (p.y - i[1])**2)**0.5 <= 30:
             t = 0
             p = PVector(26, 874)
@@ -55,20 +62,23 @@ def draw():
             
             B.remove(i)
             
+        # (Melhor parte do programa):
         if i[1] >= height:
             background(160)
             textSize(120)
             text("hehe, morreu", 10, 450)
+                                    
+    # Pequena historinha:
+    # if frameCount <= 1000:
+    #     textSize(20)
+    #     fill(255)
+    #     text("you,", 480, 680)
+    #     text("after buying a missile launcher,", 480, 710)
+    #     text("may protect yourself...", 480, 740)
+    #     text("FROM OTHERS MISSILE LAUNCHERS!!!", 480, 770)
+    #     text(":D", 480, 800)
             
-    if frameCount <= 1000:
-        textSize(20)
-        fill(255)
-        text("you,", 450, 450)
-        text("after buying a missile launcher,", 450, 480)
-        text("may protect yourself...", 450, 510)
-        text("FROM OTHERS MISSILE LAUNCHERS!!!", 450, 540)
-            
-def mouseClicked():
+def mouseClicked(): # Atualiza as variáveis com o clique do mouse:
     global t, p, v, a
     if a.y == 0:
         t = 0
