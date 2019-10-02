@@ -1,0 +1,81 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage[brazilian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Algorithm}
+\renewcommand\lstlistlistingname{Algorithms}
+\def\lstlistingautorefname{Alg.}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{Rener Oliveira e Jorge Luiz}
+\newcommand\hwnumber{1}                  % <-- homework number
+\newcommand\NetIDa{netid19823}           % <-- NetID of person #1
+\newcommand\NetIDb{netid12038}           % <-- NetID of person #2 (Comment this line out for problem sets)
+
+%\pagestyle{fancyplain}
+%\headheight 35pt              % <-- Comment this line out for problem sets (make sure you are person #1)
+
+%\rhead{\course \\ \today}
+%\lfoot{}
+%\cfoot{}
+%\rfoot{\small\thepage}
+%\headsep 1.5em
+
+\title{Relatório - Modelagem de Fenômeno Físicos}
+\author{Rener e Jorge}
+
+\begin{document}
+
+\maketitle
+
+\section*{Descrição Geral}
+
+O objetivo do projeto, foi construir um jogo, implementado no módulo Python do Processing, que mistura a diversão de uma "Guerra de Lançadores de Mísseis" com conceitos de cinemática vetorial. O jogo começa com uma pequena narração dizendo que você (jogador) após compra um lançador de mísseis, deve se proteger de outros lançadores.
+
+O jogador é um representado por um círculo no canto inferior esquerdo da tela. No decorrer do jogo, surgiram do topo da tela, pequenos outros círculos, que são os lançadores inimigos que devem ser combatidos. Ao dar um clique na tela o usuário define uma direção na qual seu míssil deva seguir para conseguir acertar os inimigos, todos os objetos sofrem com a aceleração da gravidade. 
+
+Com isso, se a bola principal atingir os limites de tela laterais e inferior, ela retorna a sua posição inicial; No momento em que ela atinge uma bola inimiga, esta desaparece, e a principal retorna novamente para o começo. Todas essas colisões são contatas internamente para atualizar a Fase do Jogo, que quanto mais avançada, maior o nível de dificuldade.
+
+\section*{Conceitos Físicos}
+\subsection*{Lançamento de Projétil}
+O primeiro conceito abordado é a modelagem de lançamento de projéteis, que é o que ocorre com a bola principal. Seja $p_0=(p_x,p_y)$ as coordenadas do seu centro. O usuário dá um clique na tela nas posições $(M_x,M_y)$. Isso gera o vetor $\vec{v}=(M_x-p_x,M_y-p_y)$ que é normalizado para o unitário $\vec{v}_u$ e multiplicado pelo módulo da velocidade inicial $v_0$ que é definido de antemão.
+
+Com isso temos a posição inicial, velocidade inicial vetorial e a aceleração vetorial da gravidade $\vec{a}=(0,-g)$ o que torna possível pelas fórmulas do movimento uniformemente variado, atualizar a posição do míssil:
+$$p_t=p_0+\vec{v}_u v_0 t+\displaystyle\frac{\vec{a}t^2}{2}$$
+
+Sendo $t$ a medição do tempo e $p_t$ a posição no tempo $t$.
+
+
+\end{document}
