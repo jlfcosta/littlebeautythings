@@ -2,13 +2,13 @@ import random as rd
 
 # Declarando as variáveis: t = tempo, p = posição, v = velocidade, a = aceleração (gravidade):
 t = 0
-r= 20
+r = 20
 p=PVector(0,0)
 v = PVector(0, 0)
 a = PVector(0, 0)
 p0 = p.copy()
 Vv=0
-k=(r/100)*0.47*0.5
+k=(r*0.47*0.5*1/100)
 h=1/60
 
 # B é a lista das coordenadas das bolinhas que estão caindo:
@@ -21,17 +21,21 @@ def setup():
     p0 = PVector(r, height-r)
 def draw():
     global t, p, v, a, B ,p0,k,h
-
+    print(p)
     t += 0.03
     # Atualização do vetor posição:
     p.add(v*t)
     p.y += 0.5*a.y*t*t
-    v1 = v.x
-    v2 = v1 +(1/60)*a.x
-    a2 = k*v2
+    v.x= v.x +h*a.x
+    a.x=v.x*k
+    # v1 = PVector(v.x,0)
+    # a1 = PVector(a.x,0)
+    # v2 = v1.add(a1.mult(h))
     
-    v.x=v2
-    a.x=a2
+    # a2 = v2*k
+    
+    # v.x=v2.x
+    # a.x=a2.x
     
     # Reinicialização das variáveis caso a bolinha branca encontre um dos limites:
     if p.y >= height-r or p.x <= r or p.x >= width-r:
