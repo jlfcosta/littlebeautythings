@@ -49,7 +49,7 @@ def draw():
         bomb()
     
     if perdeu == 1:
-        ball = PVector(-r, -r, r)
+        ball = PVector(-2*r, -2*r, r)
         ball_speed *= 0
         acceleration *= 0
         textSize(125)
@@ -125,12 +125,19 @@ def draw():
         fill(255)
         text('fazi ' + str(int(points//5 + 1)), 30, height - 30)
 
-def mouseClicked():
-    global ball, ball_speed, acceleration, t
-    if ball.y == height - r:
-        ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
-        acceleration.y = gravity
+# def mouseClicked():
+#     global ball, ball_speed, acceleration, t
+#     if ball.y == height - r:
+#         ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+#         acceleration.y = gravity
 
 def bomb():
     global bomb_list, bomb_r
     bomb_list.append([int(random(bomb_r, width - bomb_r)), -bomb_r, 0])
+    
+def keyReleased():
+    global ball, ball_speed, acceleration, t
+    if key == ' ':
+        if ball.y == height - r:
+            ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+            acceleration.y = gravity

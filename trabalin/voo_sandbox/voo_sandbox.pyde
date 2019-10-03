@@ -84,8 +84,15 @@ def draw():
         fill(255)
         text('fazi ' + str(int(points//5 + 1)), 30, height - 30)
 
-def mouseClicked():
+# def mouseClicked():
+#     global ball, ball_speed, acceleration, t
+#     if ball.y == height - r:
+#         ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+#         acceleration.y = gravity
+        
+def keyReleased():
     global ball, ball_speed, acceleration, t
-    if ball.y == height - r:
-        ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
-        acceleration.y = gravity
+    if key == ' ':
+        if ball.y == height - r:
+            ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+            acceleration.y = gravity
