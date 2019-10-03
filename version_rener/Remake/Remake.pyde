@@ -22,7 +22,8 @@ def draw():
     global r, p, v, a, t, dt, B,wind,vb,K2,k2,ab
     print("tipo vb:{} k2={}...tipodt...{}tipoab..{}".format(type(vb),type(k2),type(dt),type(ab)))
     t+=dt
-    
+    p.x=r+v.x*t +0.5*a.x*t*t
+    p.y=ymax-r+v.y*t+0.5*a.y*t*t
         
     
     
@@ -51,7 +52,8 @@ def draw():
     vb += dt*ab
     ab = vb*k2
         
-        
+def mouseClicked():
+            
 def bombinha():
     time_b=0
     global B
