@@ -2,7 +2,7 @@
 
 ball = 0
 m = 1 #
-r = 20 #
+r = 15 #
 wind_speed = PVector(0, 0) #
 ball_speed = PVector(0, 0)
 gravity = 9.8 #
@@ -46,7 +46,7 @@ def draw():
         ball = PVector(r, height - r)
         ball_speed *= 0
         acceleration *= 0
-        wind_speed.x = randomGaussian()
+        wind_speed.x = randomGaussian() #
         
     # textSize(32)
     # fill(255)

@@ -7,7 +7,6 @@ wind_speed = PVector(0, 0) #
 ball_speed = PVector(0, 0)
 gravity = 9.8 #
 acceleration = PVector(0, gravity)
-resistence = PVector(0, 0)
 
 bomb_list = []
 bomb_acceleration = PVector(0, gravity)
@@ -23,7 +22,7 @@ def setup():
     ball = PVector(r, height - r)
     
 def draw():
-    global ball, m, r, wind_speed, ball_speed, gravity, acceleration, resistence, bomb_list, bomb_acceleration, bomb_r, points, count, perdeu
+    global ball, m, r, wind_speed, ball_speed, gravity, acceleration, bomb_list, bomb_acceleration, bomb_r, points, count, perdeu
     
     rho = 1 #
     coef_ball = 0.47
