@@ -75,7 +75,7 @@
 %\headsep 1.5em
 
 \title{Relatório - Modelagem de Fenômeno Físicos}
-\author{Rener e Jorge}
+\author{Jorge Luís e Rener Oliveira}
 
 \begin{document}
 
@@ -83,11 +83,11 @@
 
 \section*{Descrição Geral}
 
-O objetivo do projeto, foi construir um jogo, implementado no módulo Python do Processing, que mistura a diversão de uma "Guerra de Lançadores de Mísseis" com conceitos de cinemática vetorial. O jogo começa com uma pequena narração dizendo que você (jogador) após compra um lançador de mísseis, deve se proteger de outros lançadores.
+O objetivo do projeto, foi construir um jogo, implementado no módulo Python do Processing, que mistura a diversão de uma "Guerra de Lançadores de Mísseis" com conceitos de cinemática vetorial, método e euler e modelagem de resistência do ar.
 
-O jogador é um representado por um círculo no canto inferior esquerdo da tela. No decorrer do jogo, surgiram do topo da tela, pequenos outros círculos, que são os lançadores inimigos que devem ser combatidos. Ao dar um clique na tela o usuário define uma direção na qual seu míssil deva seguir para conseguir acertar os inimigos, todos os objetos sofrem com a aceleração da gravidade e força de resistência do ar. 
+O jogador é um representado por um círculo no canto inferior esquerdo da tela. No decorrer do jogo, surgiram do topo da tela, pequenos outros círculos, que são os lançadores inimigos que devem ser combatidos. O usuário mira com o mouse aperta a barra de espaços, definindo uma direção na qual seu míssil seguirá para conseguir acertar os inimigos, todos os objetos sofrem com a aceleração da gravidade e a bola principal sobre também com a força de resistência do ar. 
 
-Com isso, se a bola principal atingir os limites de tela laterais e inferior, ela retorna a sua posição inicial; No momento em que ela atinge uma bola inimiga, esta desaparece, e a principal retorna novamente para o começo. Todas essas colisões são contatas internamente para atualizar a Fase do Jogo, que quanto mais avançada, maior o nível de dificuldade. Em alguns níveis surge um obstáculo a mais que é um vento de natureza aleatória que pode ajudar ou atrapalhar a jogabilidade.
+Com isso, se a bola principal atingir os limites de tela laterais e inferior, ela retorna a sua posição inicial; No momento em que ela atinge uma bola inimiga, esta desaparece, e a principal retorna novamente para o começo. Todas essas colisões são contadas internamente para atualizar a Fase do Jogo, que quanto mais avançada, maior o nível de dificuldade. Em alguns níveis surge um obstáculo a mais que é um vento de natureza aleatória que pode ajudar ou atrapalhar a jogabilidade.
 
 \section*{Conceitos Físicos e Implementação}
 \subsection*{Lançamento de Projétil com resistência do ar}
@@ -157,6 +157,7 @@ $p_{n+1}=p_n+v_{r(n)}\Delta t+\displaystyle\frac{a_{n+1}\Delta t^2}{2}$
 
 Note que a apesar de não estarmos tratando de movimento uniformemente variável, a fórmula da posição é basicamente a mesma do M.U.V. Isso pois no pequeno intervalo de $\Delta t$ podemos por aproximação dizer que o modelo é uniformemente variado, pois neste intervalo mínimo a aceleração é constante.
 
+\subsection*{Ideia Geral do código}
 No caso da bola principal, temos dois blocos de códigos que definem valores iniciais: os valores iniciais de repouso, e os valores iniciais no caso de clique do mouse:
 
 \begin{lstlisting}[language=Python]
@@ -182,18 +183,83 @@ No caso da bola principal, temos dois blocos de códigos que definem valores ini
         ball = PVector(r, height - r)
 \end{lstlisting}
 
-O bloco do clique do mouse, como dissemos, define uma $\vec{v}_0$ na direção do clique, e aciona a aceleração da gravidade.
+O bloco de pressionamento da barra de espaços, como dissemos, define uma $\vec{v}_0$ na direção apontada pelo mouse, e aciona a aceleração da gravidade.
 
 \begin{lstlisting}[language=Python]
-    def mouseClicked():
+    def keyReleased():
     global ball, ball_speed, acceleration, t
-    if ball.y == height - r:
-        ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
-        acceleration.y = gravity
+    if key == ' ':
+        if ball.y == height - r:
+            ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+            acceleration.y = gravity
 \end{lstlisting}
+A atualizaçao desses valores conforme as fórmulas explicadas, ocorrem no seguinte bloco:
+
+\begin{lstlisting}[language=Python]
+    background(127)
+    delta_t = 0.1 #
+    count += delta_t
+    
+    ball_speed.x += acceleration.x*delta_t
+    acceleration.x = ball_k*(wind_speed.x - ball_speed.x)/m
+    ball_speed.y += acceleration.y*delta_t
+    acceleration.y = ball_k*(wind_speed.y - ball_speed.y)/m + gravity
+    ball.x += ball_speed.x*delta_t + 0.5*acceleration.x*delta_t*delta_t
+    ball.y += ball_speed.y*delta_t + 0.5*acceleration.y*delta_t*delta_t
+\end{lstlisting}
+
+A declaração as bombas é feita a cada 100 frames pela função bomb() que quando acionada, coloca na lista de bombas, uma lista de três coordenadas x, y e t, representando a posição x que gerada aleatoriamente entre os limites de tela, a posição y que inicialmente é fora da tela e vai caindo por queda livre, e o tempo que inicialmente e zero e vai sendo incrementado por $\Delta t$.
+
+No mesmo bloco que itera sobre a lista de bombas, ocorre a verificação de colisão com a bola principal, que nada mais é do que verificar se a distância entre os dois objetos coincide com a soma dos dois raios. No caso de colisão, a bomba em questão sai da lista, a bola principal retorna ao canto inferior, os pontos e a fase são incrementados, e a bola principal zera sua velocidade e aceleração para que fique parada no canto inicial. No mesmo bloco há a verificação se a bomba ultrapassou a base inferior da tela, removendo-a da lista e mudando a variável de perda do jogo para verdadeira. Neste caso a bola principal some da tela e surge uma mensagem de "game over". Outra coisa que está no mesmo bloco FOR de atualização das bombas, é o gerador de vento, que a cada fase múltipla de 4, atualiza a velocidade do vento para um aleatório gaussiano. A partir daí as fórmula que calculavam velocidade relativa vão ser colocadas em prática.
+
+\begin{lstlisting}
+    def bomb():
+    global bomb_list, bomb_r
+    bomb_list.append([int(random(bomb_r, width - bomb_r)), -bomb_r, 0])
+    
+    
+    for i in bomb_list:
+        i[2] += delta_t
+        i[1] = -bomb_r + 0.5*bomb_acceleration.y*i[2]**2
+        if ((ball.x - i[0])**2 + (ball.y - i[1])**2)**0.5 < r + bomb_r - 2*(points//5):
+            bomb_list.remove(i)
+            ball = PVector(r, height - r)
+            ball_speed *= 0
+            acceleration *= 0
+            points += 1
+            count = 0
+            stage = 1 + points//5
+            if stage%4 == 0:
+                wind_speed.x = randomGaussian()
+            else: wind_speed.x = 0
+        if i[1] >= height + bomb_r:
+            bomb_list.remove(i)
+            perdeu = 1
+        noStroke()
+        fill(0)
+        circle(i[0], i[1], 2*bomb_r - 4*(points//5))
+        
+        
+        if perdeu == 1:
+        ball = PVector(-2*r, -2*r, r)
+        ball_speed *= 0
+        acceleration *= 0
+        textSize(125)
+        fill(0)
+        text('hehe, morreu', 30, height - 30)
+        textSize(20)
+        text('aperta "r", vai', 30, 750)
+\end{lstlisting}
+
+
+
 \newpage
 \section*{Bibliografia}
 
-Khan Academy. \textit{"Air and Fluid Resistance."}. 7 Set. 2018. Acesso em 2 Out. 2019
-Deisponível em https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-forces/a/air-and-fluid-resistance
+Khan Academy. \textit{"Air and Fluid Resistance."}. Acesso em 2 Out. 2019
+Disponível em https://www.khanacademy.org/computing/computer-programming/ \\
+programming-natural-simulations/programming-forces/a/air-and-fluid-resistance
+
+Processing. \textit{"Processing.py Reference."} Acesso em 2 Out. 2019/\\
+Disponível em https://py.processing.org/reference/
 \end{document}
