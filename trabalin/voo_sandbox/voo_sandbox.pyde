@@ -3,7 +3,7 @@
 ball = 0
 m = 1 #
 r = 15 #
-wind_speed = PVector(0, 0) #
+wind_speed = PVector(0, 0) # A graça do sandbox é mudar o wind_speed
 ball_speed = PVector(0, 0)
 gravity = 9.8 #
 acceleration = PVector(0, gravity)
@@ -46,25 +46,7 @@ def draw():
         ball = PVector(r, height - r)
         ball_speed *= 0
         acceleration *= 0
-        wind_speed.x = randomGaussian() #
         
-    # textSize(32)
-    # fill(255)
-    # text('points: ' + str(int(points)), 10, 40)
-    
-    # if wind_speed.x > 0:
-    #     textSize(32)
-    #     fill(255)
-    #     text('ventin:', 20, 70)
-    #     if frameCount%40 < 19: text('   ' + str(float('%.2f' % wind_speed.x)) + ' > ', 10, 100)
-    #     else: text('   ' + str(float('%.2f' % wind_speed.x)) + '  >', 10, 100)
-    # elif wind_speed.x < 0:
-    #     textSize(32)
-    #     fill(255)
-    #     text('ventin:', 20, 70)
-    #     if frameCount%40 < 19: text(' < ' + str(float('%.2f' % wind_speed.x)) + '   ', 10, 100)
-    #     else: text('<  ' + str(float('%.2f' % wind_speed.x)) + '   ', 10, 100)
-    
     noStroke()
     fill(255) 
     circle(ball.x, ball.y, 2*r)
@@ -83,12 +65,6 @@ def draw():
         textSize(200)
         fill(255)
         text('fazi ' + str(int(points//5 + 1)), 30, height - 30)
-
-# def mouseClicked():
-#     global ball, ball_speed, acceleration, t
-#     if ball.y == height - r:
-#         ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
-#         acceleration.y = gravity
         
 def keyReleased():
     global ball, ball_speed, acceleration, t
