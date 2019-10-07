@@ -22,7 +22,7 @@
   linkbordercolor={0 0 1}
 }
  
-\renewcommand\lstlistingname{Algorithm}
+\renewcommand\lstlistingname{Código}
 \renewcommand\lstlistlistingname{Algorithms}
 \def\lstlistingautorefname{Alg.}
 
@@ -83,7 +83,11 @@
 
 \section*{Descrição Geral}
 
-O objetivo do projeto, foi construir um jogo, implementado no módulo Python do Processing, que mistura a diversão de uma "Guerra de Lançadores de Mísseis" com conceitos de cinemática vetorial, método e euler e modelagem de resistência do ar.
+O objetivo do projeto, foi construir um jogo, implementado no módulo Python do Processing, que mistura a diversão de uma "Guerra de Lançadores de Mísseis" com conceitos de cinemática vetorial, Método e Euler e modelagem de resistência do ar.
+
+As várias etapas de contrução do código estão neste  \href{https://github.com/jlfcosta/littlebeautythings}{repositório do GitHub}.
+Os dois códigos funcionais, estão dentro da pasta "trabalhin" e são voo\_definitivo.pyde que possui o jogo pronto, e o arquivo voo\_sandbox.pyde que é uma simplificação para que o usuário altere o valor da velocidade do vento e consiga enxergar melhor os efeitos de sua escolha.
+
 
 O jogador é um representado por um círculo no canto inferior esquerdo da tela. No decorrer do jogo, surgiram do topo da tela, pequenos outros círculos, que são os lançadores inimigos que devem ser combatidos. O usuário mira com o mouse aperta a barra de espaços, definindo uma direção na qual seu míssil seguirá para conseguir acertar os inimigos, todos os objetos sofrem com a aceleração da gravidade e a bola principal sobre também com a força de resistência do ar. 
 
@@ -105,7 +109,7 @@ A constante $k$ é dada por $-\displaystyle\frac12\rho A C_r$ onde:
     
 \end{itemize}
 O código onde essas variáveis são declaradas está logo abaixo, e foi aplicado um fator de conversão para pixels na escala de $1$ cm = $1$ pixel.
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python,caption={Variáveis para resistência do ar}]
     rho = 1 #
     coef_ball = 0.47
     A = [2*PI*r*r/10000, 2*PI*bomb_r*bomb_r/10000]
@@ -158,9 +162,9 @@ $p_{n+1}=p_n+v_{r(n)}\Delta t+\displaystyle\frac{a_{n+1}\Delta t^2}{2}$
 Note que a apesar de não estarmos tratando de movimento uniformemente variável, a fórmula da posição é basicamente a mesma do M.U.V. Isso pois no pequeno intervalo de $\Delta t$ podemos por aproximação dizer que o modelo é uniformemente variado, pois neste intervalo mínimo a aceleração é constante.
 
 \subsection*{Ideia Geral do código}
-No caso da bola principal, temos dois blocos de códigos que definem valores iniciais: os valores iniciais de repouso, e os valores iniciais no caso de clique do mouse:
+No caso da bola principal, temos dois blocos de códigos que definem valores iniciais: os valores iniciais de repouso, e os valores iniciais no caso de pressionamento da barra de espaços.
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python,caption={Variáveis iniciais: Repouso}]
     ball = 0
     m = 1 #
     r = 20 #
@@ -185,17 +189,17 @@ No caso da bola principal, temos dois blocos de códigos que definem valores ini
 
 O bloco de pressionamento da barra de espaços, como dissemos, define uma $\vec{v}_0$ na direção apontada pelo mouse, e aciona a aceleração da gravidade.
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python,caption={Variáveis Iniciais: Início do Movimento}]
     def keyReleased():
-    global ball, ball_speed, acceleration, t
-    if key == ' ':
-        if ball.y == height - r:
-            ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
-            acceleration.y = gravity
+        global ball, ball_speed, acceleration, t
+        if key == ' ':
+            if ball.y == height - r:
+                ball_speed = (PVector(mouseX, mouseY) - ball)/3 #
+                acceleration.y = gravity
 \end{lstlisting}
-A atualizaçao desses valores conforme as fórmulas explicadas, ocorrem no seguinte bloco:
+A atualização desses valores conforme as fórmulas explicadas, ocorrem no seguinte bloco:
 
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python,,caption={Atualização de valores}]
     background(127)
     delta_t = 0.1 #
     count += delta_t
@@ -210,14 +214,15 @@ A atualizaçao desses valores conforme as fórmulas explicadas, ocorrem no segui
 
 A declaração as bombas é feita a cada 100 frames pela função bomb() que quando acionada, coloca na lista de bombas, uma lista de três coordenadas x, y e t, representando a posição x que gerada aleatoriamente entre os limites de tela, a posição y que inicialmente é fora da tela e vai caindo por queda livre, e o tempo que inicialmente e zero e vai sendo incrementado por $\Delta t$.
 
-No mesmo bloco que itera sobre a lista de bombas, ocorre a verificação de colisão com a bola principal, que nada mais é do que verificar se a distância entre os dois objetos coincide com a soma dos dois raios. No caso de colisão, a bomba em questão sai da lista, a bola principal retorna ao canto inferior, os pontos e a fase são incrementados, e a bola principal zera sua velocidade e aceleração para que fique parada no canto inicial. No mesmo bloco há a verificação se a bomba ultrapassou a base inferior da tela, removendo-a da lista e mudando a variável de perda do jogo para verdadeira. Neste caso a bola principal some da tela e surge uma mensagem de "game over". Outra coisa que está no mesmo bloco FOR de atualização das bombas, é o gerador de vento, que a cada fase múltipla de 4, atualiza a velocidade do vento para um aleatório gaussiano. A partir daí as fórmula que calculavam velocidade relativa vão ser colocadas em prática.
+No mesmo bloco que itera sobre a lista de bombas, ocorre a verificação de colisão com a bola principal, que nada mais é do que verificar se a distância entre os dois objetos coincide com a soma dos dois raios. No caso de colisão, a bomba em questão sai da lista, a bola principal retorna ao canto inferior, os pontos e a fase são incrementados, e a bola principal zera sua velocidade e aceleração para que fique parada no canto inicial. No mesmo bloco há a verificação se a bomba ultrapassou a base inferior da tela, removendo-a da lista e mudando a variável de perda do jogo para verdadeira. Neste caso a bola principal some da tela e surge uma mensagem de "game over". Outra coisa que está no mesmo bloco FOR de atualização das bombas, é o gerador de vento, que a cada fase múltipla de 4, atualiza a velocidade do vento para um aleatório gaussiano multiplicado por 150 que é uma escala de pixels razoável para causar um efeito visível. A partir daí as fórmula que calculavam velocidade relativa vão ser colocadas em prática.
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Python,caption={Função geradora de bombas}]
     def bomb():
-    global bomb_list, bomb_r
-    bomb_list.append([int(random(bomb_r, width - bomb_r)), -bomb_r, 0])
+        global bomb_list, bomb_r
+        bomb_list.append([int(random(bomb_r, width - bomb_r)), -bomb_r, 0])
+\end{lstlisting}
     
-    
+\begin{lstlisting}[language=Python,caption={Iteração de queda livre das bombas}]
     for i in bomb_list:
         i[2] += delta_t
         i[1] = -bomb_r + 0.5*bomb_acceleration.y*i[2]**2
@@ -230,7 +235,7 @@ No mesmo bloco que itera sobre a lista de bombas, ocorre a verificação de coli
             count = 0
             stage = 1 + points//5
             if stage%4 == 0:
-                wind_speed.x = randomGaussian()
+                wind_speed.x = 150*randomGaussian()
             else: wind_speed.x = 0
         if i[1] >= height + bomb_r:
             bomb_list.remove(i)
@@ -238,17 +243,17 @@ No mesmo bloco que itera sobre a lista de bombas, ocorre a verificação de coli
         noStroke()
         fill(0)
         circle(i[0], i[1], 2*bomb_r - 4*(points//5))
-        
-        
+\end{lstlisting}        
+\begin{lstlisting}[language=Python,caption={Texto de "Game Over"}]
         if perdeu == 1:
-        ball = PVector(-2*r, -2*r, r)
-        ball_speed *= 0
-        acceleration *= 0
-        textSize(125)
-        fill(0)
-        text('hehe, morreu', 30, height - 30)
-        textSize(20)
-        text('aperta "r", vai', 30, 750)
+            ball = PVector(-2*r, -2*r, r)
+            ball_speed *= 0
+            acceleration *= 0
+            textSize(125)
+            fill(0)
+            text('hehe, morreu', 30, height - 30)
+            textSize(20)
+            text('aperta "r", vai', 30, 750)
 \end{lstlisting}
 
 
