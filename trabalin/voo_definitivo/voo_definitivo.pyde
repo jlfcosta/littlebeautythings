@@ -18,7 +18,7 @@ perdeu = 0
 def setup():
     global ball, r
     
-    size(900, 900) #
+    size(550, 550) #
     ball = PVector(r, height - r)
     
 def draw():
@@ -76,8 +76,8 @@ def draw():
             points += 1
             count = 0
             stage = 1 + points//5
-            if stage%4 == 0:
-                wind_speed.x = randomGaussian()
+            if stage%2 == 0:
+                wind_speed.x = 150*randomGaussian()
             else: wind_speed.x = 0
         if i[1] >= height + bomb_r:
             bomb_list.remove(i)
