@@ -18,7 +18,7 @@ perdeu = 0
 def setup():
     global ball, r
     
-    size(550, 550) #
+    size(900, 900) #
     ball = PVector(r, height - r)
     
 def draw():
