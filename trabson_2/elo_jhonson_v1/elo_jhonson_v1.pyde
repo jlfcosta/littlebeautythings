@@ -36,7 +36,7 @@ def draw():
         v += at*dt
         B1 = PVector(h*cos(teta), h*sin(teta))
         line(width/2, height/20, width/2 + B1.x, height/20 + B1.y)
-        circle(width/2 + B1.x, height/20 + B1.y, 30)
+        circle(width/2 + B1.x, height/20 + B1.y, height/30)
         
         if h*sin(phi0) >= h*sin(phi):
             multi *= -1
@@ -47,7 +47,7 @@ def draw():
         
         B2 = PVector(h*cos(phi), h*sin(phi))
         line(width/2, 11*height/20, width/2 + B2.x, 11*height/20 + B2.y)
-        circle(width/2 + B2.x, 11*height/20 + B2.y, 30)
+        circle(width/2 + B2.x, 11*height/20 + B2.y, height/30)
     
     
     line(4*width/9, height/20, 5*width/9, height/20)
@@ -55,12 +55,12 @@ def draw():
     if mode == 0:
         line(width/2, height/20, width/2 + B.x, height/20 + B.y)
         line(width/2, 11*height/20, width/2 + B.x, 11*height/20 + B.y)
-        circle(width/2 + B.x, height/20 + B.y, 30)
-        circle(width/2 + B.x, 11*height/20 + B.y, 30)
+        circle(width/2 + B.x, height/20 + B.y, height/30)
+        circle(width/2 + B.x, 11*height/20 + B.y, height/30)
         
     textSize(height/45);
     text("\"Euler Method\", mais comumente conhecido por \"modo de fazer conta errada\".", width/30, 11*height/24)
-    text("Utilizando conceitos de energia, assim fica: (olha ali em cima, olha).", width/30, 23*height/24)
+    text("Utilizando conceitos de energia, assim fica: (olha ali em cima, olha que coisa linda).", width/30, 23*height/24)
     
 def mousePressed():
     global B, aponta, mode
