@@ -20,17 +20,18 @@ multi = -1 # Multiplicador da orientação da velocidade.
 def setup():
     global B, h
     size(900, 900)
-    h = height/3
+    h = height/3  #  <<<
     B = PVector(0, h)
 
 def draw():
-    global B, B1, B2, g, v, dt, mode, h, teta, phi0, phi, vel, multi
+    global B, B1, B2, g, v, vel, dt, mode, h, teta, phi0, phi, multi
     background(39, 255, 232)
     fill(255, 28, 194)
     stroke(43, 80, 255)
     strokeWeight(2)
     
     if mode == 1:
+        # Parte do Método de Euler:
         at = g*cos(B1.heading())
         teta += v*dt/B1.mag()
         v += at*dt
@@ -38,13 +39,13 @@ def draw():
         line(width/2, height/20, width/2 + B1.x, height/20 + B1.y)
         circle(width/2 + B1.x, height/20 + B1.y, height/30)
         
+        # Parte da energia:
         if h*sin(phi0) >= h*sin(phi):
             multi *= -1
             print(1)
             print(B2.heading())
         else: vel = (2*g*h*(1 - sin(phi0))-2*g*h*(1 - sin(phi)))**0.5
         phi += multi*vel*dt/h
-        
         B2 = PVector(h*cos(phi), h*sin(phi))
         line(width/2, 11*height/20, width/2 + B2.x, 11*height/20 + B2.y)
         circle(width/2 + B2.x, 11*height/20 + B2.y, height/30)
