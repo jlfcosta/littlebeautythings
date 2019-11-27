@@ -5,14 +5,15 @@ aponta = 0 # Posição do lançamento.
 teta = 0 # Ângulo inicial.
 g = 9.8 # Aceleração da gravidade.
 v = 0.0 # Velocidade inicial.
-dt = 0.2 # O intervalo de tempo.
+dt = 0.1 # O intervalo de tempo.
 mode = 0 # Modo de operação do aplicativo.
 
 # Para o método de energia:
 h = 0 # (modificar pelo setup()) Comprimento da cordinha.
-phi = 0 # Ângulo inicial.
+phi0 = 0 # Ângulo inicial.
+phi = 0 
 vel = 0 # Velocidade inicial.
-multi = 1 # Multiplicador da orientação da velocidade.
+multi = -1 # Multiplicador da orientação da velocidade.
 
 def setup():
     global B, h
@@ -21,7 +22,7 @@ def setup():
     B = PVector(0, h)
 
 def draw():
-    global B, B1, B2, teta, g, v, dt, mode, h, phi, vel, multi
+    global B, B1, B2, teta, g, v, dt, mode, h, phi0, phi, vel, multi
     background(192)
     
     if mode == 1:
@@ -32,12 +33,15 @@ def draw():
         line(width/2, 0, width/2 + B1.x, B1.y)
         circle(width/2 + B1.x, B1.y, 30)
         
-        # if vel == 0: multi *= -1
-        # phi += multi*vel*dt/h
-        # vel = (2*g*(h - B.y)-2*g*(h - B2.y))**0.5
-        # B2 = PVector(h*cos(phi), h*sin(phi))
-        # line(width/2, height/2, width/2 + B2.x, height/2 + B2.y)
-        # circle(width/2 + B2.x, height/2 + B2.y, 30)
+        if 2*g*h*(1 - sin(phi0))-2*g*h*(1 - sin(phi)) <= 0:
+            multi *= -1
+            print(1)
+        else: vel = (2*g*h*(1 - sin(phi0))-2*g*h*(1 - sin(phi)))**0.5
+        phi += multi*vel*dt/h
+        
+        B2 = PVector(h*cos(phi), h*sin(phi))
+        line(width/2, height/2, width/2 + B2.x, height/2 + B2.y)
+        circle(width/2 + B2.x, height/2 + B2.y, 30)
     
     line(4*width/9, 0, 5*width/9, 0)
     line(4*width/9, height/2, 5*width/9, height/2)
@@ -59,9 +63,14 @@ def mouseDragged():
     B.rotate(aponta.heading() - B.heading())
     
 def mouseReleased():
-    global B, B1, B2, teta, v, mode, phi, vel
+    global B, B1, B2, teta, v, mode, phi, phi0, vel, multi
     teta = B.heading()
-    phi = B.heading()
+    if B.heading() < 90:
+        phi = B.heading() + 0.00001
+    else:
+        phi = B.heading() - 0.00001
+        multi *= -1
+    phi0 = B.heading()
     v = 0
     vel = 0
     mode = 1
