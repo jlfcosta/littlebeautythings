@@ -153,9 +153,9 @@ def mouseReleased():
     phi0 = [h*sin(blist2[i].heading()) for i in range(bolinhas)]
     if aponta.heading() > HALF_PI:
         for i in range(bolinhas):
-            phi[i] = phi0[i] - 0.00001 if phi0[i] != HALF_PI else phi0[i]
+            phi[i] = phi0[i] + 0.00001 if phi0[i] != HALF_PI else phi0[i]
         multi = 1
     else:
         for i in range(bolinhas):
-            phi[i] = phi0[i] + 0.00001 if phi0[i] != HALF_PI else phi0[i]
+            phi[i] = phi0[i] - 0.00001 if phi0[i] != HALF_PI else phi0[i]
         multi = -1
