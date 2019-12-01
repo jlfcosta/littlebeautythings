@@ -4,6 +4,7 @@ B2 = 0 # Posição de bolinha 2.
 aponta = 0 # Posição do lançamento.
 g = 9.8 # Aceleração da gravidade.
 dt = 0.2 # O intervalo de tempo.
+h = 0 # (modificar pelo setup()) Comprimento da cordinha.
 mode = 0 # Modo de operação do aplicativo.
 
 # Para o método de Euler:
@@ -11,7 +12,6 @@ teta = 0 # Ângulo inicial.
 v = 0 # Velocidade inicial.
 
 # Para o método de energia:
-h = 0 # (modificar pelo setup()) Comprimento da cordinha.
 phi0 = 0 # Ângulo inicial (referencial).
 phi = 0 # Ângulo atual.
 vel = 0 # Velocidade inicial.
@@ -20,11 +20,11 @@ multi = -1 # Multiplicador da orientação da velocidade.
 def setup():
     global B, h
     size(900, 900)
-    h = height/3  #  <<<
+    h = height/3  # Comprimento da cordinha.
     B = PVector(0, h)
 
 def draw():
-    global B, B1, B2, g, v, vel, dt, mode, h, teta, phi0, phi, multi
+    global B, B1, B2, g, v, vel, dt, h, mode, teta, phi0, phi, multi
     background(39, 255, 232)
     fill(255, 28, 194)
     stroke(43, 80, 255)
